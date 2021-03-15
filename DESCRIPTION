@@ -1,0 +1,14 @@
+Package: scihubr
+Title: Access sci-hub from R
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jan",
+           family = "Netik",
+           role = c("aut", "cre"),
+           email = "netikja@gmail.com")
+Description: Downloads papers from sci-hub.se
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
