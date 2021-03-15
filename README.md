@@ -6,9 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-`{scihubr}` is an unofficial API to [sci-hub.se](sci-hub.se), making it
-easy to download the papers you need within `R`. The package also offers
-you a citation.
+`{scihubr}` is an unofficial API to [sci-hub.se](https://sci-hub.se/),
+making it easy to download the papers you need within `R`. The package
+also offers you a citation.
 
 ## Installation
 
