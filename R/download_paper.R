@@ -2,7 +2,7 @@
 #'
 #' Unofficial API to [sci-hub.se](sci-hub.se).
 #'
-#' @param paper *character*, DOI or URL of the paper you want to download.
+#' @param query *character*, DOI or URL of the paper you want to download.
 #' @param path *character*, optional path of the `.pdf` file (full, with a
 #'   filename), defaults to  temporary file.
 #' @param open *logical*, whether to open the result (defaults to `TRUE`).
@@ -10,7 +10,7 @@
 #' @return
 #' @export
 #'
-#' @importFrom xml2 xml_find_first xml_attr read_html xml_text
+#' @importFrom xml2 xml_find_first xml_attr read_html xml_text xml_find_all
 #' @importFrom httr parse_url build_url
 #' @importFrom readr read_file_raw
 #' @importFrom usethis ui_info ui_code_block
@@ -18,8 +18,10 @@
 #' @importFrom stringr str_trim
 #'
 #' @examples
-download_paper <- function(paper, path = tempfile(fileext = ".pdf"), open = TRUE) {
-  content <- read_html(paste0("https://sci-hub.se/", paper))
+download_paper <- function(query,
+                           path = tempfile(fileext = ".pdf"),
+                           open = TRUE) {
+  content <- read_html(paste0("https://sci-hub.se/", query))
 
   paper_url_raw <- content %>%
     xml_find_first(".//iframe") %>%
