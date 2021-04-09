@@ -4,10 +4,10 @@
 \alias{download_paper}
 \title{Downloads a Paper}
 \usage{
-download_paper(paper, path = tempfile(fileext = ".pdf"), open = TRUE)
+download_paper(query, path = tempfile(fileext = ".pdf"), open = TRUE)
 }
 \arguments{
-\item{paper}{\emph{character}, DOI or URL of the paper you want to download.}
+\item{query}{\emph{character}, DOI or URL of the paper you want to download.}
 
 \item{path}{\emph{character}, optional path of the \code{.pdf} file (full, with a
 filename), defaults to  temporary file.}
