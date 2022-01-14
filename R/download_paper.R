@@ -17,14 +17,13 @@
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_trim
 #'
-#' @examples
 download_paper <- function(query,
                            path = tempfile(fileext = ".pdf"),
                            open = TRUE) {
   content <- read_html(paste0("https://sci-hub.se/", query))
 
   paper_url_raw <- content %>%
-    xml_find_first(".//iframe") %>%
+    xml_find_all("//*[@id='pdf']") %>%
     xml_attr("src") %>%
     parse_url()
 
