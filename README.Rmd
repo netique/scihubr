@@ -18,7 +18,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-`{scihubr}` is an unofficial API to [sci-hub.se](https://sci-hub.se/), making it easy to download the papers you need within `R`. The package also offers you a citation.
+`{scihubr}` is an unofficial API to [sci-hub.se](https://sci-hub.se/), making it easy to download the papers you need within `R`. The package also offers you a citation in a bunch of favorite citation styles.
+
+### Note
+
+[sci-hub.se](https://sci-hub.se/) is not an official service, and its legality is questionable in many countries. Please make sure to check the legality of using such services in your country before using this package. The author of this package does not condone illegal activities and is not responsible for any misuse of the package. The papers are provided by [sci-hub.se](https://sci-hub.se/), not by the package itself. This package is intended for educational and research purposes only.
+
 
 ## Installation
 
@@ -30,7 +35,7 @@ remotes::install_github("netique/scihubr")
 ```
 ## Example
 
-If you just want ot read a paper as quick as possible, type:
+If you just want to read a paper as quick as possible, type:
 
 ```{r basic, eval=FALSE, include=TRUE}
 scihubr::download_paper("url_or_doi_of_your_favourite_paper")

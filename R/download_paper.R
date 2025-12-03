@@ -6,48 +6,69 @@
 #' @param path *character*, optional path of the `.pdf` file (full, with a
 #'   filename), defaults to  temporary file.
 #' @param open *logical*, whether to open the result (defaults to `TRUE`).
+#' @param base_url *character*, base URL of the Sci-Hub instance to use.
+#' @param citation_style *character*, citation style to use. One of `"apa"`,
+#'   `"mla"`, `"gost"`, `"acs"`, `"acm"`, `"ieee"`, `"aip"`, `"ama"`, `"aps"`,
+#'   `"cse"`, `"cep"`, `"gsa"`, or `"chicago"`. Defaults to `"apa"`.
 #'
-#' @return
+#' @return Called for its side effects, invisibly returns `NULL`.
+#'
 #' @export
 #'
-#' @importFrom xml2 xml_find_first xml_attr read_html xml_text xml_find_all
-#' @importFrom httr parse_url build_url
-#' @importFrom readr read_file_raw
+#' @importFrom xml2 xml_find_all xml_attr
+#' @importFrom httr2 url_modify request req_url_path_append req_perform
+#'   resp_body_html resp_body_json
 #' @importFrom usethis ui_info ui_code_block
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_trim
+#' @importFrom rlang arg_match
 #'
-download_paper <- function(query,
-                           path = tempfile(fileext = ".pdf"),
-                           open = TRUE) {
-  content <- read_html(paste0("https://sci-hub.se/", query))
+download_paper <- function(
+  query,
+  path = tempfile(fileext = ".pdf"),
+  open = TRUE,
+  base_url = "https://sci-hub.se/",
+  citation_style = c(
+    "apa",
+    "mla",
+    "gost",
+    "acs",
+    "acm",
+    "ieee",
+    "aip",
+    "ama",
+    "aps",
+    "cse",
+    "cep",
+    "gsa",
+    "chicago"
+  )
+) {
+  citation_style <- arg_match(citation_style)
 
-  paper_url_raw <- content %>%
-    xml_find_all("//*[@id='pdf']") %>%
-    xml_attr("src") %>%
-    parse_url()
+  req_pdf <- request(base_url) |> req_url_path_append(query)
 
-  unescape_html <- function(str) {
-    lapply(str, function(x) {
-      xml_text(read_html(paste0("<x>", x, "</x>")))
-    })
-  }
+  resp_pdf <- req_pdf |> req_perform()
 
-  paper_citation <- content %>%
-    xml_find_all("//div[@id='citation']//text()") %>%
-    as.character() %>%
-    str_trim() %>%
-    unescape_html()
+  pdf_html <- resp_pdf |> resp_body_html()
 
-  paper_url_raw$scheme <- "https"
-  paper_url_raw$fragment <- NULL
+  pdf_url_path <- pdf_html |>
+    xml_find_all("//div[@class='download']//a") |>
+    xml_attr("href")
 
-  paper_url <- paper_url_raw %>% build_url()
+  pdf_link <- url_modify(base_url, path = pdf_url_path)
 
-  read_file_raw(paper_url) %>% writeBin(path)
+  req_citation <- request(base_url) |>
+    req_url_path_append("recite/") |>
+    req_url_path_append(citation_style) |>
+    req_url_path_append(query)
 
-  ui_info("Cite as:")
-  ui_code_block(paper_citation)
+  resp_citation <- req_citation |> req_perform()
 
-  if (open) system2("open", path)
+  citation_json <- resp_citation |> resp_body_json()
+  citation_text <- citation_json$citation
+  citation_style_from_resp <- citation_json$style
+
+  ui_info("{citation_style_from_resp}-style citation:")
+  ui_code_block(citation_text)
+
+  if (open) system2("open", pdf_link)
 }

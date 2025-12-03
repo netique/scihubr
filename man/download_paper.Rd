@@ -4,7 +4,14 @@
 \alias{download_paper}
 \title{Downloads a Paper}
 \usage{
-download_paper(query, path = tempfile(fileext = ".pdf"), open = TRUE)
+download_paper(
+  query,
+  path = tempfile(fileext = ".pdf"),
+  open = TRUE,
+  base_url = "https://sci-hub.se/",
+  citation_style = c("apa", "mla", "gost", "acs", "acm", "ieee", "aip", "ama", "aps",
+    "cse", "cep", "gsa", "chicago")
+)
 }
 \arguments{
 \item{query}{\emph{character}, DOI or URL of the paper you want to download.}
@@ -13,9 +20,15 @@ download_paper(query, path = tempfile(fileext = ".pdf"), open = TRUE)
 filename), defaults to  temporary file.}
 
 \item{open}{\emph{logical}, whether to open the result (defaults to \code{TRUE}).}
+
+\item{base_url}{\emph{character}, base URL of the Sci-Hub instance to use.}
+
+\item{citation_style}{\emph{character}, citation style to use. One of \code{"apa"},
+\code{"mla"}, \code{"gost"}, \code{"acs"}, \code{"acm"}, \code{"ieee"}, \code{"aip"}, \code{"ama"}, \code{"aps"},
+\code{"cse"}, \code{"cep"}, \code{"gsa"}, or \code{"chicago"}. Defaults to \code{"apa"}.}
 }
 \value{
-
+Called for its side effects, invisibly returns \code{NULL}.
 }
 \description{
 Unofficial API to \url{sci-hub.se}.
